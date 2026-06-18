@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rupal Mahajan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #141c26;
+    --bg-card: #1c2736;
+    --bg-card2: #202f40;
+    --ink: #eef0f4;
+    --ink-soft: #9dafc4;
+    --ink-faint: #5a7a96;
+    --sage: #7eafd4;
+    --pink: #c47fa0;
+    --pink-dim: rgba(196,127,160,0.13);
+    --sage-dim: rgba(126,175,212,0.13);
+    --blue: #7eafd4;
+    --blue-dim: rgba(126,175,212,0.13);
+    --blue-glow: rgba(126,175,212,0.25);
+    --border: rgba(126,175,212,0.12);
+    --border-card: rgba(126,175,212,0.15);
+    --accent: #a8c5e0;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Instrument Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(20,28,38,0.92);
+    backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-name { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--ink); text-decoration: none; letter-spacing: 0.01em; opacity: 0; transition: opacity 0.5s ease; }
+  .nav-name.visible { opacity: 1; }
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a { font-size: 0.75rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--blue); }
+
+  /* HERO */
+  .hero-wrapper { position: relative; overflow: hidden; min-height: 92vh; display: flex; align-items: center; }
+  #constellation { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .hero {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; align-items: center;
+    max-width: 960px; margin: 0 auto;
+    padding: 5rem 2.5rem 5rem;
+    position: relative; z-index: 1; width: 100%;
+  }
+  .hero-text h1 { font-family: 'DM Serif Display', serif; font-size: 3.4rem; line-height: 1.08; margin-bottom: 0.5rem; color: var(--ink); }
+  .hero-text h1 em { font-style: italic; color: var(--blue); }
+  .hero-location { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--pink); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.3rem; }
+  .hero-subtitle {
+    font-size: 0.95rem; color: var(--ink-soft); line-height: 1.8;
+    border-left: 2px solid var(--sage); padding-left: 0.9rem; margin-bottom: 1.2rem;
+  }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .tag {
+    background: rgba(196,127,160,0.1); color: var(--pink);
+    border: 1px solid rgba(196,127,160,0.35);
+    border-radius: 100px; padding: 0.28rem 0.85rem;
+    font-size: 0.73rem; font-weight: 500; letter-spacing: 0.02em;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 8px rgba(196,127,160,0.18);
+  }
+  .tag { cursor: default; }
+  .tag:hover { background: rgba(196,127,160,0.13); border-color: rgba(196,127,160,0.4); box-shadow: 0 0 8px rgba(196,127,160,0.18); }
+
+  /* LIVING TEXT */
+  .living-text-wrap { height: 1.6rem; overflow: hidden; margin: 0.8rem 0 1.3rem; }
+  .living-text {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    color: var(--ink-soft); letter-spacing: 0.04em; font-weight: 500;
+    display: block; opacity: 1; transform: translateY(0); white-space: nowrap;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .living-text.out { opacity: 0; transform: translateY(-8px); }
+  .living-text.in  { opacity: 0; transform: translateY(8px); }
+
+  .hero-contact-strip { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+  .hero-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.52rem 1.2rem; border-radius: 100px; font-size: 0.8rem; text-decoration: none; transition: all 0.22s; font-family: 'Instrument Sans', sans-serif; }
+  .hero-btn.primary { background: var(--blue); color: var(--bg); font-weight: 500; }
+  .hero-btn.primary:hover { background: var(--accent); }
+  .hero-btn.outline { background: transparent; color: var(--ink-soft); border: 1px solid var(--border-card); }
+  .hero-btn.outline:hover { background: var(--blue-dim); color: var(--ink); border-color: var(--blue); }
+
+  /* AVATAR */
+  .hero-visual { display: flex; justify-content: center; align-items: center; }
+  .avatar-outer {
+    position: relative; width: 260px; height: 300px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .avatar-ring {
+    position: absolute; inset: 0;
+    border-radius: 40% 60% 55% 45% / 50% 40% 60% 50%;
+    border: 1px solid rgba(126,175,212,0.2);
+    animation: pulse-ring 4s ease-in-out infinite;
+  }
+  .avatar-ring2 {
+    position: absolute; inset: -12px;
+    border-radius: 40% 60% 55% 45% / 50% 40% 60% 50%;
+    border: 1px solid rgba(126,175,212,0.1);
+    animation: pulse-ring 4s ease-in-out infinite 1.5s;
+  }
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.02); }
+  }
+  .avatar-frame {
+    width: 240px; height: 280px;
+    border-radius: 40% 60% 55% 45% / 50% 40% 60% 50%;
+    background: linear-gradient(145deg, #1e2e42, #243548);
+    border: 1px solid rgba(196,127,160,0.4);
+    box-shadow: 0 0 20px rgba(196,127,160,0.15), 0 0 40px rgba(196,127,160,0.08);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 1;
+  }
+  .avatar-initials { font-family: 'DM Serif Display', serif; font-size: 4rem; color: var(--blue); font-style: italic; opacity: 0.7; }
+
+  /* SECTIONS */
+  section { padding: 3.5rem 2.5rem; max-width: 960px; margin: 0 auto; border-top: 1px solid var(--border); }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pink); margin-bottom: 1.5rem; }
+
+  /* ABOUT */
+  .about-text { font-size: 1rem; line-height: 1.9; color: var(--ink-soft); max-width: 700px; outline: none; }
+  .about-text strong { color: var(--ink); font-weight: 500; }
+
+  /* EDIT BANNER */
+  .edit-banner {
+    background: rgba(126,175,212,0.07); border-bottom: 1px solid var(--border);
+    padding: 0.4rem 2.5rem; text-align: center;
+  }
+  .edit-banner span { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--ink-faint); letter-spacing: 0.05em; }
+
+  /* RESEARCH */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.1rem; }
+  .project-card {
+    background: var(--bg-card); border-radius: 14px;
+    border: 1px solid var(--border-card); padding: 1.5rem;
+    transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s;
+    position: relative; overflow: hidden;
+  }
+  .project-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--pink));
+    opacity: 0; transition: opacity 0.22s;
+  }
+  .project-card:hover { transform: translateY(-4px) scale(1.02); border-color: rgba(126,175,212,0.28); box-shadow: 0 8px 32px rgba(0,0,0,0.25); }
+  .project-card:hover::before { opacity: 1; }
+  .project-num { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--ink-faint); margin-bottom: 0.6rem; letter-spacing: 0.06em; }
+  .project-title { font-family: 'DM Serif Display', serif; font-size: 1.05rem; margin-bottom: 0.5rem; color: var(--ink); line-height: 1.3; }
+  .project-card { display: flex; flex-direction: column; }
+  .project-desc { flex: 1; }
+  .project-status { display: inline-block; margin-top: 1rem; font-size: 0.68rem; padding: 0.22rem 0.75rem; border-radius: 100px; letter-spacing: 0.04em; align-self: flex-start; }
+  .status-ongoing { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(126,175,212,0.2); }
+  .status-analysis { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(126,175,212,0.2); }
+
+  /* CV */
+  .cv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .cv-block h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; margin-bottom: 1.1rem; color: var(--ink); }
+  .cv-item { border-left: 2px solid rgba(196,127,160,0.2); padding-left: 0.9rem; margin-bottom: 1rem; transition: border-color 0.2s; }
+  .cv-item:hover { border-left-color: var(--pink); }
+  .cv-item .year { font-family: 'DM Mono', monospace; font-size: 0.66rem; color: var(--ink-faint); letter-spacing: 0.05em; }
+  .cv-item .title { font-weight: 500; font-size: 0.88rem; color: var(--ink); margin-top: 0.15rem; }
+  .cv-item .place { font-size: 0.8rem; color: var(--ink-soft); }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  .skill-block { background: var(--bg-card); border-radius: 10px; border: 1px solid var(--border-card); padding: 1.1rem 1.2rem; }
+  .skill-block h4 { font-size: 0.73rem; font-weight: 500; color: var(--pink); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.7rem; }
+  .skill-list { list-style: none; }
+  .skill-list li { font-size: 0.82rem; color: var(--ink-soft); padding: 0.22rem 0; border-bottom: 1px solid var(--border); }
+  .skill-list li:last-child { border-bottom: none; }
+
+  /* ETC */
+  .fun-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  .fun-card {
+    background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-card); padding: 1.1rem 1.2rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .fun-card:hover { background: var(--bg-card2); border-color: rgba(126,175,212,0.22); }
+  .fun-emoji { font-size: 1.4rem; margin-bottom: 0.5rem; display: block; }
+  .fun-label { font-size: 0.68rem; font-weight: 500; color: var(--pink); text-transform: uppercase; letter-spacing: 0.09em; }
+  .fun-value { font-size: 0.9rem; color: var(--ink); margin-top: 0.25rem; }
+  .fun-sub { font-size: 0.77rem; color: var(--ink-soft); margin-top: 0.15rem; }
+  .languages-strip { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.5rem; }
+  .lang-badge { background: var(--sage-dim); color: var(--sage); border: 1px solid rgba(126,175,212,0.18); border-radius: 100px; padding: 0.25rem 0.8rem; font-size: 0.75rem; font-weight: 500; }
+
+  /* TICKER — extra living text thing in etc section */
+  .ticker-wrap { overflow: hidden; margin-bottom: 1.2rem; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 0.55rem 0; }
+  .ticker {
+    display: inline-block; white-space: nowrap;
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    color: var(--ink-faint); letter-spacing: 0.07em;
+    animation: ticker-scroll 35s linear infinite;
+  }
+  @keyframes ticker-scroll { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
+
+  /* CONTACT */
+  .contact-text { font-size: 0.95rem; color: var(--ink-soft); line-height: 1.8; margin-bottom: 1.3rem; max-width: 560px; }
+  .contact-links { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+  .contact-link { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1.2rem; border-radius: 100px; font-size: 0.82rem; text-decoration: none; transition: all 0.22s; font-family: 'Instrument Sans', sans-serif; }
+  .contact-link.primary { background: var(--blue); color: var(--bg); font-weight: 500; }
+  .contact-link.primary:hover { background: var(--accent); }
+  .contact-link.outline { background: transparent; color: var(--ink-soft); border: 1px solid var(--border-card); }
+  .contact-link.outline:hover { background: var(--blue-dim); color: var(--ink); border-color: var(--blue); }
+
+  /* FADE-IN ON SCROLL */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+
+  /* INTERESTS */
+  .interests-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .interest-item {
+    background: var(--bg-card); border-radius: 12px;
+    border: 1px solid var(--border-card); padding: 1.2rem 1.3rem;
+    border-left: 2px solid var(--pink);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .interest-item:hover { background: var(--bg-card2); }
+  .interest-title { font-family: 'DM Serif Display', serif; font-size: 0.98rem; color: var(--ink); margin-bottom: 0.4rem; line-height: 1.3; }
+  .interest-desc { font-size: 0.8rem; color: var(--ink-soft); line-height: 1.65; }
+
+
+
+
+
+  /* ABOUT SECTION */
+  #about { position: relative; }
+  .about-grid {
+    background-image:
+      linear-gradient(rgba(126,175,212,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(126,175,212,0.07) 1px, transparent 1px);
+    background-size: 36px 36px;
+    background-color: rgba(126,175,212,0.03);
+    border-radius: 16px;
+    padding: 2rem 2.2rem;
+    border: 1px solid rgba(126,175,212,0.18);
+  }
+
+
+  /* ROAMING CAT */
+  .cat-wrap {
+    position: fixed; z-index: 999;
+    width: 68px; height: 68px;
+    pointer-events: none;
+    transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.15));
+  }
+  .cat-wrap.nav-sit { top: -10px; left: 175px; }
+  .cat-wrap.peek-right { right: -4px; left: unset; transform: scaleX(-1); }
+  .cat-wrap.peek-left  { left: -4px; right: unset; }
+  .cat-svg { width: 68px; height: 68px; overflow: visible; }
+  @keyframes blink {
+    0%, 40%, 60%, 100% { transform: scaleY(1); transform-origin: center; }
+    50% { transform: scaleY(0.08); transform-origin: center; }
+  }
+  @keyframes tail-sway {
+    0%, 100% { transform: rotate(-12deg); transform-origin: 33px 46px; }
+    50% { transform: rotate(12deg); transform-origin: 33px 46px; }
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scaleY(1); transform-origin: bottom; }
+    50% { transform: scaleY(1.03); transform-origin: bottom; }
+  }
+  .cat-eye-l { animation: blink 4.5s ease-in-out infinite; transform-origin: 20px 26px; }
+  .cat-eye-r { animation: blink 6.2s ease-in-out infinite 1.8s; transform-origin: 34px 26px; }
+  .cat-tail  { animation: tail-sway 2s ease-in-out infinite; }
+  .cat-body-g { animation: breathe 3s ease-in-out infinite; }
+
+
+  /* COMET TRAIL */
+  .comet-dot {
+    position: fixed; pointer-events: none; z-index: 9999;
+    border-radius: 50%; transform: translate(-50%, -50%);
+    transition: opacity 0.4s ease;
+  }
+
+  /* SECTION DIVIDER GLOW */
+  section {
+    position: relative;
+  }
+  section::before {
+    content: '';
+    position: absolute; top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), var(--pink), var(--blue), transparent);
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+    opacity: 0;
+  }
+  section.divider-lit::before {
+    width: 100%; opacity: 1;
+  }
+  section.divider-fade::before {
+    opacity: 0;
+  }
+
+  /* NEBULA BLOBS */
+  .nebula {
+    position: absolute; pointer-events: none; z-index: 0;
+    border-radius: 50%; filter: blur(60px);
+    opacity: 0; transition: opacity 1.8s ease;
+    transform: translate(-50%, -50%);
+  }
+  .nebula.visible { opacity: 1; }
+  section > *:not(.nebula) { position: relative; z-index: 1; }
+
+
+  /* PAGE LOAD ENTRANCE */
+  .hero-text h1,
+  .hero-location,
+  .hero-subtitle,
+  .hero-tags,
+  .living-text-wrap,
+  .hero-contact-strip,
+  .hero-visual {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: entrance 0.7s ease forwards;
+  }
+  .hero-location       { animation-delay: 0.1s; }
+  .hero-text h1        { animation-delay: 0.25s; }
+  .hero-subtitle       { animation-delay: 0.45s; }
+  .hero-tags           { animation-delay: 0.6s; }
+  .living-text-wrap    { animation-delay: 0.72s; }
+  .hero-contact-strip  { animation-delay: 0.82s; }
+  .hero-visual         { animation-delay: 0.5s; }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+  @keyframes entrance {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+
+  /* FUN CARD HOVER PHOTOS */
+  .fun-card {
+    position: relative;
+    overflow: hidden;
+  }
+  .fun-card-photo {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 12px;
+    z-index: 0;
+  }
+  .fun-card-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(20,28,38,0.85) 0%, rgba(20,28,38,0.4) 100%);
+    border-radius: 12px;
+  }
+  .fun-card:hover .fun-card-photo { opacity: 1; }
+  .fun-card > *:not(.fun-card-photo) { position: relative; z-index: 1; }
+  .fun-card:hover .fun-emoji,
+  .fun-card:hover .fun-label,
+  .fun-card:hover .fun-value,
+  .fun-card:hover .fun-sub,
+  .fun-card:hover .languages-strip { 
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  }
+
+
+  /* TYPING CURSOR */
+  .living-prefix {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    color: var(--ink-faint); letter-spacing: 0.04em; font-weight: 500;
+  }
+  .living-cursor {
+    font-family: 'DM Mono', monospace; font-size: 0.78rem;
+    color: var(--blue); font-weight: 400;
+    animation: cursor-blink 0.8s step-end infinite;
+    margin-left: 1px;
+  }
+  @keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+
+  /* EXPANDABLE RESEARCH CARDS */
+  .project-desc { 
+    max-height: 0; 
+    overflow: hidden; 
+    opacity: 0;
+    font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin 0.3s ease;
+    margin-top: 0;
+  }
+  .project-card.expanded .project-desc {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 0.8rem;
+  }
+  .see-more-btn {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    margin-top: 0.9rem;
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    color: var(--pink); letter-spacing: 0.06em;
+    cursor: pointer; border: 1px solid rgba(196,127,160,0.35); background: rgba(196,127,160,0.08);
+    padding: 0.3rem 0.8rem; border-radius: 100px;
+    transition: all 0.2s ease;
+  }
+  .see-more-btn:hover { background: rgba(196,127,160,0.18); border-color: rgba(196,127,160,0.55); }
+  .see-more-btn .btn-arrow {
+    display: inline-block;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .project-card.expanded .see-more-btn .btn-arrow { transform: rotate(180deg); }
+  .project-card.expanded .see-more-btn .btn-label::after { content: 'see less'; }
+  .see-more-btn .btn-label::after { content: 'see more'; }
+  .see-more-btn .btn-label { display: none; }
+  .see-more-btn .btn-label { display: inline; }
+
+
+  /* ABOUT PHOTO COLUMN */
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 110px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .about-photos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .polaroid {
+    width: 110px; height: 90px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(196,127,160,0.25);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+  }
+  .polaroid:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  }
+  .about-photo {
+    width: 110px; height: 90px;
+    object-fit: cover; object-position: center;
+    display: block;
+  }
+  .photo-placeholder {
+    width: 110px; height: 90px;
+    background: linear-gradient(135deg, var(--bg-card2), #1e2a36);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+  }
+
+  @media (max-width: 680px) {
+    .about-layout { grid-template-columns: 1fr; }
+    .about-photos { display: none; }
+  }
+
+  /* GRAIN OVERLAY */
+  .hero-wrapper::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 2; opacity: 0.55;
+  }
+
+  /* MOUSE GLOW */
+  .hero-glow {
+    position: absolute; width: 520px; height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(126,175,212,0.04) 0%, transparent 65%);
+    pointer-events: none; z-index: 0;
+    transform: translate(-50%, -50%);
+    transition: left 0.12s ease, top 0.12s ease;
+  }
+
+  /* GLITCH */
+  @keyframes glitch-1 {
+    0%, 90%, 100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
+    92% { clip-path: inset(10% 0 60% 0); transform: translate(-3px, 1px); }
+    94% { clip-path: inset(50% 0 20% 0); transform: translate(3px, -1px); }
+    96% { clip-path: inset(30% 0 40% 0); transform: translate(-2px, 0); }
+    98% { clip-path: inset(70% 0 5% 0); transform: translate(2px, 1px); }
+  }
+  @keyframes glitch-2 {
+    0%, 90%, 100% { clip-path: inset(0 0 100% 0); transform: translate(0); opacity: 0; }
+    92% { clip-path: inset(60% 0 10% 0); transform: translate(3px, -1px); opacity: 0.7; }
+    94% { clip-path: inset(20% 0 50% 0); transform: translate(-3px, 1px); opacity: 0.7; }
+    96% { clip-path: inset(40% 0 30% 0); transform: translate(2px, 0); opacity: 0.7; }
+    98% { clip-path: inset(5% 0 70% 0); transform: translate(-2px, -1px); opacity: 0.7; }
+  }
+  .glitch-wrap { position: relative; display: inline-block; }
+  .glitch-wrap::before,
+  .glitch-wrap::after {
+    content: attr(data-text);
+    position: absolute; inset: 0;
+    font-family: 'DM Serif Display', serif;
+    font-size: inherit; line-height: inherit; font-style: italic;
+  }
+  .glitch-wrap::before {
+    color: var(--blue); animation: glitch-1 6s infinite;
+  }
+  .glitch-wrap::after {
+    color: var(--pink); animation: glitch-2 6s infinite 0.1s;
+  }
+
+  /* SECTION LABEL GLITCH */
+  @keyframes label-flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.3; }
+    97% { opacity: 1; }
+    98% { opacity: 0.5; }
+    99% { opacity: 1; }
+  }
+  .section-label.flickered { animation: label-flicker 0.4s ease forwards; }
+
+  footer { text-align: center; padding: 2rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--ink-faint); border-top: 1px solid var(--border); max-width: 960px; margin: 0 auto; }
+
+  @media (max-width: 680px) {
+    /* NAV */
+    nav { padding: 0.9rem 1.2rem; }
+    .nav-links { gap: 0.8rem; }
+    .nav-links a { font-size: 0.65rem; letter-spacing: 0.05em; }
+    .nav-name { font-size: 0.95rem; }
+
+    /* HERO */
+    .hero-wrapper { min-height: unset; }
+    .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem 2.5rem; gap: 1.5rem; min-height: unset; }
+    .hero-visual { display: none; }
+  .mobile-photo { display: none; }
+  @media (max-width: 680px) {
+    .mobile-photo {
+      display: block;
+      width: 90px; height: 100px;
+      border-radius: 40% 60% 55% 45% / 50% 40% 60% 50%;
+      object-fit: cover; object-position: center;
+      border: 1px solid rgba(196,127,160,0.4);
+      box-shadow: 0 0 20px rgba(196,127,160,0.15);
+      margin-bottom: 1rem;
+    }
+  }
+    .hero-text h1 { font-size: 2.6rem; }
+    .hero-subtitle { font-size: 0.88rem; }
+    .living-text-wrap { height: 2.5rem; }
+    .living-text { font-size: 0.68rem; white-space: normal; }
+
+    /* SECTIONS */
+    section { padding: 2.2rem 1.2rem; }
+    .section-label { font-size: 0.75rem; }
+
+    /* RESEARCH CARDS */
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card { padding: 1.2rem; }
+
+    /* CV */
+    .cv-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+
+    /* SKILLS */
+    .skills-grid { grid-template-columns: 1fr; }
+
+    /* INTERESTS */
+    .interests-grid { grid-template-columns: 1fr; }
+
+    /* BEYOND THE LAB */
+    .fun-grid { grid-template-columns: 1fr 1fr; }
+
+    /* CAT - pin to bottom right corner on mobile, don't roam */
+    .cat-wrap {
+      position: fixed !important;
+      bottom: 1rem !important;
+      right: 1rem !important;
+      top: unset !important;
+      left: unset !important;
+      transform: none !important;
+      width: 52px !important;
+      height: 52px !important;
+    }
+    .cat-svg { width: 52px !important; height: 52px !important; }
+
+    /* TICKER */
+    .ticker { font-size: 0.65rem; }
+
+    /* CONTACT */
+    .contact-links { flex-direction: column; }
+    .contact-link { justify-content: center; }
+
+    /* HERO BUTTONS */
+    .hero-contact-strip { flex-direction: column; gap: 0.5rem; }
+    .hero-btn { justify-content: center; text-align: center; }
+
+    /* ABOUT GRID */
+    .about-grid-wrap { padding: 1.2rem 1.2rem !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-name">Rupal Mahajan</a>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#research">research</a></li>
+    <li><a href="#cv">cv</a></li>
+    <li><a href="#interests">otherwise</a></li>
+    <li><a href="#etc">beyond the lab</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+
+<div class="cat-wrap nav-sit" id="roaming-cat">
+<svg class="cat-svg" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <!-- tail -->
+  <g class="cat-tail">
+    <path d="M33 46 Q50 44 52 34 Q54 24 48 20" stroke="#1e1e1e" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M33 46 Q50 44 52 34 Q54 24 48 20" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  </g>
+  <!-- body -->
+  <g class="cat-body-g">
+    <ellipse cx="26" cy="38" rx="14" ry="11" fill="#1e1e1e" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+    <!-- white chest -->
+    <ellipse cx="26" cy="40" rx="7" ry="8" fill="#efefef"/>
+  </g>
+  <!-- head -->
+  <circle cx="26" cy="22" r="13" fill="#1e1e1e" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+  <!-- white face patch -->
+  <ellipse cx="26" cy="25" rx="9" ry="8" fill="#efefef"/>
+  <!-- ears -->
+  <polygon points="14,12 10,2 20,10" fill="#1e1e1e" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+  <polygon points="38,12 42,2 32,10" fill="#1e1e1e" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+  <!-- inner ears pink -->
+  <polygon points="15,11 12,5 19,10" fill="#c47fa0" opacity="0.6"/>
+  <polygon points="37,11 40,5 33,10" fill="#c47fa0" opacity="0.6"/>
+  <!-- eyes -->
+  <g class="cat-eye-l">
+    <ellipse cx="20" cy="22" rx="3.5" ry="3" fill="#5a9e6e"/>
+    <ellipse cx="20" cy="22" rx="1.5" ry="2.5" fill="#1a1a1a"/>
+    <circle cx="21" cy="21" r="0.8" fill="white" opacity="0.8"/>
+  </g>
+  <g class="cat-eye-r">
+    <ellipse cx="32" cy="22" rx="3.5" ry="3" fill="#5a9e6e"/>
+    <ellipse cx="32" cy="22" rx="1.5" ry="2.5" fill="#1a1a1a"/>
+    <circle cx="33" cy="21" r="0.8" fill="white" opacity="0.8"/>
+  </g>
+  <!-- heart nose -->
+  <path d="M25 27.5 C25 26.2 23 26.2 23 27.5 C23 28.8 25 30 25 30 C25 30 27 28.8 27 27.5 C27 26.2 25 26.2 25 27.5 Z" fill="#1a1a1a"/>
+  <!-- whiskers -->
+  <line x1="10" y1="25" x2="19" y2="26" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+  <line x1="10" y1="27" x2="19" y2="27" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+  <line x1="33" y1="26" x2="42" y2="25" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+  <line x1="33" y1="27" x2="42" y2="27" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+  <!-- paws -->
+  <ellipse cx="19" cy="49" rx="5" ry="3.5" fill="#efefef"/>
+  <ellipse cx="31" cy="49" rx="5" ry="3.5" fill="#efefef"/>
+</svg>
+</div>
+
+<div class="hero-wrapper">
+  <canvas id="constellation"></canvas>
+  <div class="hero-glow" id="hero-glow"></div>
+  <div class="hero">
+    <div class="hero-text">
+      <img src="rupal_photo.jpg" class="mobile-photo" alt="Rupal Mahajan" style="display:none;">
+      <p class="hero-location">Northwestern University · Evanston, IL</p>
+      <h1>Hi, I'm<br><em><span class="glitch-wrap" data-text="Rupal Mahajan.">Rupal Mahajan.</span></em></h1>
+      <p class="hero-subtitle">PhD student in social psychology interested in how our own beliefs, behaviors, and identities shape the way we perceive and evaluate others. Broadly, my research sits at the intersection of self-control, moral judgment, and interpersonal perception.</p>
+      <div class="hero-tags">
+        <span class="tag">self-control</span>
+        <span class="tag">social perception</span>
+        <span class="tag">self-concept</span>
+        <span class="tag">motivation</span>
+        <span class="tag">relationships</span>
+      </div>
+      <div class="living-text-wrap" style="display:flex;align-items:center;height:1.6rem;">
+        <span class="living-prefix">currently thinking about:&thinsp;</span><span class="living-text" id="living"></span><span class="living-cursor" id="cursor">|</span>
+      </div>
+      <div class="hero-contact-strip">
+        <a href="mailto:rupal.mahajan@u.northwestern.edu" class="hero-btn primary">✉ email me</a>
+        <a href="#research" class="hero-btn outline">view research →</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="avatar-outer">
+        <div class="avatar-ring"></div>
+        <div class="avatar-ring2"></div>
+        <div class="avatar-frame">
+          <img src="rupal_photo.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;border-radius:inherit;">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="max-width:960px;margin:0 auto;padding:0 2.5rem;"><div style="height:1px;background:linear-gradient(90deg,transparent,var(--blue),var(--pink),var(--blue),transparent);opacity:0.6;"></div></div>
+<section id="about">
+  <div class="nebula" style="width:500px;height:400px;background:radial-gradient(circle, rgba(126,175,212,0.11) 0%, transparent 68%);top:50%;left:70%;"></div>
+  <p class="section-label">// about</p>
+  <div class="about-layout">
+  <div class="about-grid-wrap" style="background-image: linear-gradient(rgba(126,175,212,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(126,175,212,0.08) 1px, transparent 1px); background-size: 36px 36px; background-color: rgba(126,175,212,0.03); border-radius: 16px; padding: 2rem 2.2rem; border: 1px solid rgba(126,175,212,0.2); margin-top: 0.5rem;">
+  <p class="about-text reveal">
+    Hello! I'm a Ph.D. student in Social Psychology at <strong>Northwestern University</strong>, working with <strong>Dr. Daniel Molden</strong>. I'm drawn to questions about what we think and understand about people and ourselves. Before I knew what social psychology was, I was posting Instagram polls to see what people thought of the random questions I asked! Turns out I've always been interested in the <em>why</em>.<br><br>Two years running studies at <strong>The Ohio State University</strong> in the <strong>Motivation and Cognition Lab</strong> and a summer doing group counseling at an addiction treatment clinic showed me that there are still so many unanswered questions about human behavior.<br><br>Now, I run studies to experimentally find out what people think of my questions, with data to back it up! Keep scrolling to find out more about my work and interests, and feel free to reach out if anything sparks a thought. I love a good conversation!
+  
+  
+  
+
+  </p>
+  </div>
+  <div class="about-photos">
+    <div class="polaroid"><img src="photo_presenting.JPG" class="about-photo" alt="presenting" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="photo-placeholder" style="display:none;">🎤</div></div>
+    <div class="polaroid"><img src="photo_lab.JPG" class="about-photo" alt="lab" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="photo-placeholder" style="display:none;">🔬</div></div>
+    <div class="polaroid"><img src="photo_freddie.JPG" class="about-photo" alt="Freddie" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="photo-placeholder" style="display:none;">🐱</div></div>
+    <div class="polaroid"><img src="photo_cohort.JPG" class="about-photo" alt="cohort" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="photo-placeholder" style="display:none;">🎓</div></div>
+    <div class="polaroid"><img src="photo_poster.jpeg" class="about-photo" alt="poster" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="photo-placeholder" style="display:none;">📋</div></div>
+  </div>
+  </div>
+</section>
+
+<section id="research">
+  <div class="nebula" style="width:480px;height:380px;background:radial-gradient(circle, rgba(196,127,160,0.10) 0%, transparent 68%);top:40%;left:25%;"></div>
+  <p class="section-label">// research</p>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;"><div class="project-num">01</div><span class="project-status status-ongoing" style="margin-top:0;font-size:0.62rem;padding:0.15rem 0.6rem;"><span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--blue);margin-right:4px;animation:pulse-dot 1.8s ease-in-out infinite;vertical-align:middle;"></span>collecting &amp; analyzing data!</span></div>
+      <div class="project-title">Self-Control Strategies &amp; Interpersonal Impressions</div>
+      <p class="project-question" style="color:var(--pink);font-weight:500;font-size:0.88rem;line-height:1.5;margin-bottom:0.3rem;">How do the ways we approach self-control shape how others see us?</p>
+      <p class="project-desc">When someone restrains entirely versus allows themselves intentional balance, we judge them differently: how competent and warm they seem, whether we want to be around them, and how moral we think they are. And those strategies and the impressions they create look different across situations.</p>
+      <button class="see-more-btn" onclick="toggleCard(this)"><span class="btn-label"></span><span class="btn-arrow">↓</span></button>
+    </div>
+    <div class="project-card reveal">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;"><div class="project-num">02</div><span class="project-status status-analysis" style="margin-top:0;font-size:0.62rem;padding:0.15rem 0.6rem;"><span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--pink);margin-right:4px;animation:pulse-dot 1.8s ease-in-out infinite 0.4s;vertical-align:middle;"></span>data analysis underway</span></div>
+      <div class="project-title">Bias Confrontation as a Goal-Conflict Dilemma</div>
+      <p class="project-question" style="color:var(--pink);font-weight:500;font-size:0.88rem;line-height:1.5;margin-bottom:0.3rem;">When do we speak up against bias — and when do we stay silent?</p>
+      <p class="project-desc">Competing goals shape whether people decide to confront bias at all, and different situations and types of bias create different pressures, motivations, and reasons for acting or holding back.</p>
+      <button class="see-more-btn" onclick="toggleCard(this)"><span class="btn-label"></span><span class="btn-arrow">↓</span></button>
+    </div>
+  </div>
+</section>
+
+<section id="cv">
+  <div class="nebula" style="width:460px;height:360px;background:radial-gradient(circle, rgba(126,175,212,0.10) 0%, transparent 68%);top:60%;left:75%;"></div>
+  <p class="section-label">// cv</p>
+  <div class="cv-grid reveal">
+    <div class="cv-block">
+      <h3>Education</h3>
+      <div class="cv-item">
+        <div class="year">2025 – present (est. 2030)</div>
+        <div class="title">PhD, Social Psychology</div>
+        <div class="place">Northwestern University · Advisor: Dr. Dan Molden</div>
+      </div>
+      <div class="cv-item">
+        <div class="year">est. 2027</div>
+        <div class="title">MS, Social Psychology</div>
+        <div class="place">Northwestern University</div>
+      </div>
+      <div class="cv-item">
+        <div class="year">May 2025</div>
+        <div class="title">BS, Psychology</div>
+        <div class="place">The Ohio State University</div>
+      </div>
+    </div>
+    <div class="cv-block">
+      <h3>Teaching</h3>
+      <div class="cv-item">
+        <div class="year">Spring 2026</div>
+        <div class="title">Teaching Assistant: Developmental Psychology</div>
+        <div class="place">Northwestern University</div>
+      </div>
+      <div class="cv-item">
+        <div class="year">Winter 2026</div>
+        <div class="title">Teaching Assistant: Psychological Statistics</div>
+        <div class="place">Northwestern University</div>
+      </div>
+    </div>
+    <div class="cv-block">
+      <h3>Research Experience</h3>
+      <div class="cv-item">
+        <div class="year">2024 – 2025</div>
+        <div class="title">Lab Supervisor</div>
+        <div class="place">Fujita Lab, The Ohio State University</div>
+      </div>
+      <div class="cv-item">
+        <div class="year">2023 – 2024</div>
+        <div class="title">Research Assistant</div>
+        <div class="place">Fujita Lab, The Ohio State University</div>
+      </div>
+    </div>
+    <div class="cv-block">
+      <h3>Service</h3>
+      <div class="cv-item">
+        <div class="year">2025 – present</div>
+        <div class="title">Secretary, Psychology Graduate Student Council</div>
+        <div class="place">Northwestern University</div>
+      </div>
+      <div class="cv-item">
+        <div class="year">2025 – present</div>
+        <div class="title">Research Mentor, 15 Undergraduate RAs</div>
+        <div class="place">Northwestern University</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+    <h3 style="font-family: 'DM Serif Display', serif; font-size: 1.1rem; margin-bottom: 1.1rem; color: var(--ink);">Research Skills</h3>
+    <div class="skills-grid reveal">
+    <div class="skill-block">
+      <h4>Statistical &amp; Computational</h4>
+      <ul class="skill-list">
+        <li>R (lme4, ggplot2, regression)</li>
+        <li>SPSS, JASP</li>
+        <li>Qualtrics</li>
+        <li>Microsoft Office Suite</li>
+      </ul>
+    </div>
+    <div class="skill-block">
+      <h4>Qualitative Methods</h4>
+      <ul class="skill-list">
+        <li>Thematic coding</li>
+        <li>Linguistic abstraction coding</li>
+        <li>Audio-recorded data</li>
+      </ul>
+    </div>
+    <div class="skill-block">
+      <h4>Experimental Methods</h4>
+      <ul class="skill-list">
+        <li>Deception protocols</li>
+        <li>Confederate paradigms</li>
+        <li>Physiological measurement</li>
+        <li>Multimodal data collection</li>
+      </ul>
+    </div>
+  </div>
+  </div>
+  <div style="margin-top: 2rem;">
+    <a href="rupal_cv.pdf" class="contact-link outline" download>↓ download full cv</a>
+  </div>
+</section>
+
+<section id="interests">
+  <div class="nebula" style="width:440px;height:340px;background:radial-gradient(circle, rgba(196,127,160,0.10) 0%, transparent 68%);top:50%;left:30%;"></div>
+  <p class="section-label">// otherwise</p>
+  <p style="font-size: 0.85rem; color: var(--ink-faint); font-family: 'DM Mono', monospace; margin-bottom: 1.2rem; letter-spacing: 0.04em;">developing questions: not yet hypotheses :P</p>
+  <div class="interests-grid reveal">
+    <div class="interest-item">
+      <div class="interest-title">Influencers &amp; identity online</div>
+      <p class="interest-desc">How does creating content for an audience shape your own sense of self — your beliefs, your values, the way you see yourself?</p>
+    </div>
+    <div class="interest-item">
+      <div class="interest-title">Moral norms &amp; technology use online</div>
+      <p class="interest-desc">How do communities decide what "healthy" tech use looks like? How do those norms spread, even when they diverge from how people actually behave?</p>
+    </div>
+    <div class="interest-item">
+      <div class="interest-title">Cross-cultural definitions of success</div>
+      <p class="interest-desc">How do cultural backgrounds shape what we think success looks like — and what happens when those definitions clash or get imposed across cultures?</p>
+    </div>
+    <div class="interest-item">
+      <div class="interest-title">Moral signals in close relationships</div>
+      <p class="interest-desc">How do we choose who we want in our lives — romantically and platonically? What moral cues and self-beliefs guide who we're drawn to, and what we decide actually matters in those bonds?</p>
+    </div>
+  </div>
+</section>
+
+<section id="etc">
+  <div class="nebula" style="width:420px;height:320px;background:radial-gradient(circle, rgba(109,184,154,0.09) 0%, transparent 68%);top:50%;left:65%;"></div>
+  <p class="section-label">// beyond the lab</p>
+  <div class="ticker-wrap">
+    <span class="ticker">self-control &nbsp;·&nbsp; moral judgment &nbsp;·&nbsp; interpersonal perception &nbsp;·&nbsp; identity &nbsp;·&nbsp; social media &nbsp;·&nbsp; motivation &nbsp;·&nbsp; how we see each other &nbsp;·&nbsp; bias &nbsp;·&nbsp; self-regulation &nbsp;·&nbsp; relationships &nbsp;·&nbsp; social cognition &nbsp;·&nbsp; self-control &nbsp;·&nbsp; moral judgment &nbsp;·&nbsp; interpersonal perception &nbsp;·&nbsp; identity &nbsp;·&nbsp; social media &nbsp;·&nbsp; motivation</span>
+  </div>
+  <div class="fun-grid reveal">
+    <div class="fun-card">
+      <div class="fun-card-photo" style="background: linear-gradient(135deg, #2d4a6e, #4a2d6e); background-image: url('photo_languages.jpg');"></div>
+      <span class="fun-emoji">🗣️</span>
+      <div class="fun-label">languages</div>
+      <div class="languages-strip">
+        <span class="lang-badge">English</span>
+        <span class="lang-badge">Hindi</span>
+        <span class="lang-badge">Punjabi</span>
+        <span class="lang-badge">American Sign Language</span>
+      </div>
+    </div>
+    <div class="fun-card">
+      <div class="fun-card-photo" style="background: linear-gradient(135deg, #1e3a2e, #2e3a1e); background-image: url('photo_city.jpg');"></div>
+      <span class="fun-emoji">📍</span>
+      <div class="fun-label">based in</div>
+      <div class="fun-value">Chicago, IL</div>
+      <div class="fun-sub">originally from Columbus, Ohio &amp; Jammu, India 🇮🇳</div>
+    </div>
+    <div class="fun-card">
+      <div class="fun-card-photo" style="background: linear-gradient(135deg, #3a1e2e, #1e2e3a); background-image: url('photo_hobbies.jpg');"></div>
+      <span class="fun-emoji">✨</span>
+      <div class="fun-label">outside the lab</div>
+      <div class="fun-value">writing poetry, boxing, yoga, music</div>
+      <div class="fun-sub">+ bothering my cat, Freddie</div>
+    </div>
+    <div class="fun-card">
+      <div class="fun-card-photo" style="background: linear-gradient(135deg, #2e1e3a, #1e2a3a); background-image: url('photo_obsessed.jpg');"></div>
+      <span class="fun-emoji">💭</span>
+      <div class="fun-label">currently obsessed with</div>
+      <div class="fun-value">techno music</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="nebula" style="width:400px;height:300px;background:radial-gradient(circle, rgba(126,175,212,0.10) 0%, transparent 68%);top:40%;left:40%;"></div>
+  <p class="section-label">// contact</p>
+  <p class="contact-text reveal">Always happy to chat about research, potential collaborations, or whatever's on your mind.</p>
+  <div class="contact-links">
+    <a href="mailto:rupal.mahajan@u.northwestern.edu" class="contact-link primary">✉ rupal.mahajan@u.northwestern.edu</a>
+    <a href="https://www.linkedin.com/in/rupalmahajan14" class="contact-link outline">LinkedIn</a>
+    <a href="#" class="contact-link outline">Bluesky</a>
+    <a href="rupal_cv.pdf" class="contact-link outline" download>↓ download CV</a>
+  </div>
+  <p style="margin-top: 1.2rem; font-size: 0.78rem; color: var(--ink-faint);">
+    Department of Psychology, Northwestern University · Swift Hall · Evanston, IL 60201
+  </p>
+</section>
+
+<footer>rupal mahajan · 2026</footer>
+
+<script>
+
+
+// ROAMING CAT
+const cat = document.getElementById('roaming-cat');
+const sections = ['about','research','cv','interests','etc','contact'];
+let catState = 'nav-sit';
+let catSection = 0;
+
+const catPositions = [
+  { cls: 'nav-sit', style: { top: '2px', bottom: '', left: getNavRight(), right: '' } },
+  { cls: 'peek-right', style: { top: '30%',   bottom: '', left: '',    right: '-10px' } },
+  { cls: 'peek-left',  style: { top: '55%',   bottom: '', left: '-10px', right: '' } },
+  { cls: 'nav-sit', style: { top: '2px', bottom: '', left: getNavRight(), right: '' } },
+  { cls: 'peek-right', style: { top: '70%',   bottom: '', left: '',    right: '-10px' } },
+  { cls: 'peek-left',  style: { top: '20%',   bottom: '', left: '-10px', right: '' } },
+];
+
+let posIdx = 0;
+// Set initial position after fonts load
+window.addEventListener('load', () => {
+  const name = document.querySelector('.nav-name');
+  if (name) cat.style.left = (name.getBoundingClientRect().right + 10) + 'px'; cat.style.top = '2px';
+});
+function getNavRight() {
+  const name = document.querySelector('.nav-name');
+  if (!name) return '175px';
+  return (name.getBoundingClientRect().right + 4) + 'px';
+}
+function moveCat() {
+  if (window.innerWidth <= 680) return;
+  posIdx = (posIdx + 1) % catPositions.length;
+  const pos = catPositions[posIdx];
+  cat.className = 'cat-wrap ' + pos.cls;
+  Object.entries(pos.style).forEach(([k, v]) => cat.style[k] = v);
+}
+
+setInterval(moveCat, 9000);
+
+// MOUSE GLOW
+const glow = document.getElementById('hero-glow');
+const heroWrapper = document.querySelector('.hero-wrapper');
+heroWrapper.addEventListener('mousemove', (e) => {
+  const rect = heroWrapper.getBoundingClientRect();
+  glow.style.left = (e.clientX - rect.left) + 'px';
+  glow.style.top  = (e.clientY - rect.top)  + 'px';
+});
+
+// NAV NAME FADE ON SCROLL
+const navName = document.querySelector('.nav-name');
+const heroEl  = document.querySelector('.hero');
+const navObs  = new IntersectionObserver((entries) => {
+  navName.classList.toggle('visible', !entries[0].isIntersecting);
+}, { threshold: 0.2 });
+navObs.observe(heroEl);
+
+// SECTION LABEL FLICKER ON SCROLL
+const labels = document.querySelectorAll('.section-label');
+const labelObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.remove('flickered');
+      void e.target.offsetWidth;
+      e.target.classList.add('flickered');
+      labelObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+labels.forEach(l => labelObs.observe(l));
+
+// CONSTELLATION
+const canvas = document.getElementById('constellation');
+const ctx = canvas.getContext('2d');
+const wrapper = canvas.parentElement;
+
+function resize() {
+  canvas.width = wrapper.offsetWidth;
+  canvas.height = wrapper.offsetHeight;
+}
+resize();
+window.addEventListener('resize', () => { resize(); initDots(); });
+
+let dots = [];
+function initDots() {
+  dots = [];
+  const n = Math.min(70, Math.floor(canvas.width / 14));
+  for (let i = 0; i < n; i++) {
+    dots.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.6 + 0.5,
+      twinkle: Math.random() * Math.PI * 2
+    });
+  }
+}
+initDots();
+
+let frame = 0;
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  frame++;
+  for (let i = 0; i < dots.length; i++) {
+    const d = dots[i];
+    d.x += d.vx; d.y += d.vy;
+    d.twinkle += 0.025;
+    if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
+    if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
+    const alpha = 0.4 + 0.3 * Math.sin(d.twinkle);
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(168,197,224,${alpha})`;
+    ctx.fill();
+    for (let j = i + 1; j < dots.length; j++) {
+      const b = dots[j];
+      const dx = d.x - b.x, dy = d.y - b.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 130) {
+        ctx.beginPath();
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(b.x, b.y);
+        const fade = 1 - dist / 130;
+        ctx.strokeStyle = `rgba(126,175,212,${0.18 * fade})`;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+// LIVING TEXT
+const phrases = [
+  'what your habits say about you',
+  'how we project ourselves onto others',
+  'self-regulation &amp; decisions',
+  'identity &amp; moral values',
+  'influencers',
+  'having multiple goals'
+];
+const el = document.getElementById('living');
+let idx = 0;
+const cursor = document.getElementById('cursor');
+let typing = false;
+
+function typePhrase(phrase, callback) {
+  el.innerHTML = '';
+  let i = 0;
+  typing = true;
+  const typeInterval = setInterval(() => {
+    el.innerHTML += phrase[i];
+    i++;
+    if (i >= phrase.length) {
+      clearInterval(typeInterval);
+      typing = false;
+      callback();
+    }
+  }, 38);
+}
+
+function erasePhrase(callback) {
+  let text = el.innerHTML;
+  // strip html entities safely
+  const div = document.createElement('div');
+  div.innerHTML = text;
+  let plain = div.textContent;
+  const eraseInterval = setInterval(() => {
+    plain = plain.slice(0, -1);
+    el.textContent = plain;
+    if (plain.length === 0) {
+      clearInterval(eraseInterval);
+      callback();
+    }
+  }, 22);
+}
+
+function runTypewriter() {
+  idx = (idx + 1) % phrases.length;
+  // decode html entities for typing
+  const div = document.createElement('div');
+  div.innerHTML = phrases[idx];
+  const plain = div.textContent;
+  setTimeout(() => {
+    typePhrase(plain, () => {
+      const displayTime = Math.min(6000, Math.max(2500, plain.length * 55));
+      setTimeout(() => {
+        erasePhrase(() => {
+          runTypewriter();
+        });
+      }, displayTime);
+    });
+  }, 300);
+}
+
+// Start by typing first phrase
+const div0 = document.createElement('div');
+div0.innerHTML = phrases[0];
+typePhrase(div0.textContent, () => {
+  const displayTime = Math.min(6000, Math.max(2500, div0.textContent.length * 55));
+  setTimeout(() => {
+    erasePhrase(() => { runTypewriter(); });
+  }, displayTime);
+});
+
+// SCROLL REVEAL
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+reveals.forEach(r => observer.observe(r));
+
+// COMET TRAIL - desktop only
+if (!('ontouchstart' in window)) {
+const trailDots = [];
+const TRAIL_LENGTH = 6;
+for (let i = 0; i < TRAIL_LENGTH; i++) {
+  const d = document.createElement('div');
+  d.className = 'comet-dot';
+  const size = (TRAIL_LENGTH - i) * 0.9 + 1;
+  const alpha = (TRAIL_LENGTH - i) / TRAIL_LENGTH * 0.55;
+  d.style.cssText = `width:${size}px;height:${size}px;background:rgba(168,197,224,${alpha});`;
+  document.body.appendChild(d);
+  trailDots.push({ el: d, x: 0, y: 0 });
+}
+let mouseX = 0, mouseY = 0;
+window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+function animateTrail() {
+  trailDots[0].x = mouseX; trailDots[0].y = mouseY;
+  for (let i = 1; i < TRAIL_LENGTH; i++) {
+    trailDots[i].x += (trailDots[i-1].x - trailDots[i].x) * 0.35;
+    trailDots[i].y += (trailDots[i-1].y - trailDots[i].y) * 0.35;
+  }
+  trailDots.forEach(d => {
+    d.el.style.left = d.x + 'px';
+    d.el.style.top  = d.y + 'px';
+  });
+  requestAnimationFrame(animateTrail);
+}
+animateTrail();
+} // end desktop-only comet
+
+// SECTION DIVIDER GLOW
+const allSections = document.querySelectorAll('section');
+const dividerObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('divider-lit');
+      setTimeout(() => e.target.classList.add('divider-fade'), 1400);
+    }
+  });
+}, { threshold: 0.05 });
+allSections.forEach(s => dividerObs.observe(s));
+
+// NEBULA BLOBS
+const nebulaDivs = document.querySelectorAll('.nebula');
+const nebulaObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    e.target.classList.toggle('visible', e.isIntersecting);
+  });
+}, { threshold: 0.1 });
+nebulaDivs.forEach(n => nebulaObs.observe(n));
+
+
+// EXPANDABLE CARDS
+function toggleCard(btn) {
+  const card = btn.closest('.project-card');
+  card.classList.toggle('expanded');
+}
+
+</script>
+</body>
+</html>
